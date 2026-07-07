@@ -1,0 +1,10 @@
+Main.class
+repository\FabricaConexao.class
+controller\TransacaoController.class
+model\Transacao.class
+model\Receita.class
+model\CategoriaDespesa.class
+controller\TransacaoRouter.class
+repository\TransacaoRepository.class
+model\Despesa.class
+service\TransacaoService.class

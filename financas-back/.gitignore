@@ -1,0 +1,13 @@
+# Pastas temporárias do IntelliJ
+.idea/
+*.iml
+out/
+
+# Arquivos compilados do Java (Backend)
+/financas-back/target/
+/financas-back/.env
+
+# Dependências baixadas do Angular (Frontend)
+/financas-front/node_modules/
+/financas-front/.angular/
+/financas-front/dist/
