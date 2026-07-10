@@ -34,8 +34,55 @@ export class AppComponent {
   ];
 
   // =========================================================================
+  // VARIÁVEIS AUXILIARES (Conectadas diretamente ao Formulário HTML)
+  // =========================================================================
+  novaDescricao: string = '';
+  novoValor: number | null = null; // Iniciamos com null para a caixinha começar limpa na tela
+  novoTipo: string = 'RECEITA';    // Padrão inicial do Select será 'Receita'
+
+  // =========================================================================
   // COMPORTAMENTOS (Métodos da Classe)
   // =========================================================================
+
+  /**
+   * Pega os dados capturados pelas variáveis auxiliares, valida e insere na lista.
+   */
+  adicionarTransacao(): void {
+
+    // Fazemos uma barreira de segurança (igual no Java).
+    // Verificamos se a descrição não está vazia (.trim() remove espaços em branco das pontas)
+    // e se o valor existe e é maior que zero. Se algo estiver errado, o código para no 'return'.
+    if (!this.novaDescricao || this.novaDescricao.trim() === '' || !this.novoValor || this.novoValor <= 0) {
+      alert('Por favor, preencha todos os campos corretamente!');
+      return;
+    }
+
+    // Criamos o novo objeto da transação estruturado
+    const nova = {
+      id: Date.now(), // Gera um ID numérico único usando os milissegundos do relógio atual
+      descricao: this.novaDescricao,
+      valor: this.novoValor,
+      tipo: this.novoTipo
+    };
+
+    // O método .push() empurra o nosso novo objeto para o fim do Array original
+    this.transacoes.push(nova);
+
+    // Se a transação que o usuário acabou de criar for do tipo RECEITA, nós somamos ao saldo atual.
+    // Se for do tipo DESPESA, nós subtraímos do saldo atual.
+    if (nova.tipo === 'RECEITA') {
+      this.resumoSaldo.saldoAtual += nova.valor;
+    } else {
+      this.resumoSaldo.saldoAtual -= nova.valor;
+    }
+
+    // LIMPEZA:
+    // Como usamos Two-Way Data Binding, ao resetarmos as variáveis aqui no TypeScript,
+    // o Angular limpa instantaneamente os textos das caixinhas lá na tela do usuário!
+    this.novaDescricao = '';
+    this.novoValor = null;
+    this.novoTipo = 'RECEITA';
+  }
 
   /**
    * Remove uma transação específica da memória e estorna o seu impacto no saldo.

@@ -16,6 +16,34 @@
 
   <hr>
 
+  <h2>Nova Transação</h2>
+  <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+
+    <div style="margin-bottom: 10px;">
+      <label>Descrição: </label>
+      <input type="text" [(ngModel)]="novaDescricao" placeholder="Ex: Gasolina" style="width: 100%; padding: 5px;">
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <label>Valor (R$): </label>
+      <input type="number" [(ngModel)]="novoValor" placeholder="0.00" style="width: 100%; padding: 5px;">
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <label>Tipo: </label>
+      <select [(ngModel)]="novoTipo" style="width: 100%; padding: 5px;">
+        <option value="RECEITA">Receita (Entrada)</option>
+        <option value="DESPESA">Despesa (Saída)</option>
+      </select>
+    </div>
+
+    <button (click)="adicionarTransacao()" style="background-color: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; width: 100%; font-weight: bold;">
+      Salvar Transação
+    </button>
+  </div>
+
+  <hr>
+
   <h2>Extrato de Transações</h2>
 
   <ul style="list-style-type: none; padding: 0;">
