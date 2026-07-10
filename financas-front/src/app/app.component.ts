@@ -17,8 +17,19 @@ export class AppComponent {
   // Um objeto estruturado para simular os dados consolidados do usuário.
   // No TypeScript, objetos usam a estrutura de chave: valor entre chaves {}.
   resumoSaldo = {
-    usuario: 'Vanessa Machado',
+    usuario: 'Vanessa Machado Araújo',
     saldoAtual: 4610.50,
     status: 'Positivo'
   };
+
+  /*
+  * Array (Lista) de Objetos de Transações.
+  * Cada item possui um id, uma descrição, um valor numérico e o tipo.
+  */
+  transacoes = [
+    { id: 1, descricao: 'Mercado Central', valor: 250.00, tipo: 'DESPESA' },
+    { id: 2, descricao: 'Salário Empresa', valor: 3500.00, tipo: 'RECEITA' },
+    { id: 3, descricao: 'Academia', valor: 90.00, tipo: 'DESPESA' },
+    { id: 4, descricao: 'Freelance Desenvolvedora', valor: 1450.00, tipo: 'RECEITA' }
+  ];
 }

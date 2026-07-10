@@ -14,4 +14,20 @@
 
   <p>Status da conta: <strong>{{ resumoSaldo.saldoAtual >= 0 ? 'Positivo' : 'Negativo' }}</strong></p>
 
+  <hr>
+
+  <h2>Extrato de Transações</h2>
+
+  <ul style="list-style-type: none; padding: 0;">
+    <li *ngFor="let t of transacoes" style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+
+      <span>{{ t.descricao }}</span>
+
+      <strong [style.color]="t.tipo === 'RECEITA' ? 'green' : 'red'">
+        {{ t.tipo === 'RECEITA' ? '+' : '-' }} R$ {{ t.valor }}
+      </strong>
+
+    </li>
+  </ul>
+
 </div>
