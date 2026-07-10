@@ -32,4 +32,23 @@ export class AppComponent {
     { id: 3, descricao: 'Academia', valor: 90.00, tipo: 'DESPESA' },
     { id: 4, descricao: 'Freelance Desenvolvedora', valor: 1450.00, tipo: 'RECEITA' }
   ];
+
+  // =========================================================================
+  // COMPORTAMENTOS (Métodos da Classe)
+  // =========================================================================
+
+  /**
+   * Remove uma transação específica da memória e estorna o seu impacto no saldo.
+   * @param transacaoSelecionada O objeto completo da transação que o usuário clicou
+   */
+  excluirTransacao(transacaoSelecionada: any): void {
+
+    if (transacaoSelecionada.tipo === 'RECEITA') {
+      this.resumoSaldo.saldoAtual -= transacaoSelecionada.valor;
+    } else {
+      this.resumoSaldo.saldoAtual += transacaoSelecionada.valor;
+    }
+
+    this.transacoes = this.transacoes.filter(t => t.id !== transacaoSelecionada.id);
+  }
 }
