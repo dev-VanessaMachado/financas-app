@@ -1,1 +1,17 @@
-<h1>Olá, Angular! Meu app de finanças começou.</h1>
+<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
+
+  <h1>Painel de Finanças Pessoais</h1>
+  <hr>
+
+  <h3>Bem-vinda de volta, {{ resumoSaldo.usuario }}!</h3>
+
+  <p>
+    Seu saldo atual é de:
+    <strong [style.color]="resumoSaldo.saldoAtual >= 0 ? 'green' : 'red'">
+      R$ {{ resumoSaldo.saldoAtual }}
+    </strong>
+  </p>
+
+  <p>Status da conta: <strong>{{ resumoSaldo.saldoAtual >= 0 ? 'Positivo' : 'Negativo' }}</strong></p>
+
+</div>
