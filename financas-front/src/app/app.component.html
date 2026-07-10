@@ -46,6 +46,10 @@
 
   <h2>Extrato de Transações</h2>
 
+  <p *ngIf="transacoes.length === 0" style="color: #666; font-style: italic; background-color: #f0f0f0; padding: 10px; border-radius: 4px; text-align: center;">
+    Nenhuma transação cadastrada até o momento. Seu extrato está limpo!
+  </p>
+
   <ul style="list-style-type: none; padding: 0;">
     <li *ngFor="let t of transacoes" style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
 
