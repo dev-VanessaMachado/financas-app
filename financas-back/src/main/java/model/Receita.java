@@ -9,6 +9,15 @@ import java.time.LocalDate;
  * @author Vanessa Machado Araújo
  */
 public class Receita extends Transacao {
+
+    /**
+     * CONSTRUTOR PADRÃO (VAZIO)
+     * Necessário para a deserialização do JSON pelo Jackson.
+     */
+    public Receita() {
+        super(); // Invoca explicitamente o construtor padrão de Transacao
+    }
+
     /**
      * Construtor para inicializar uma receita utilizando o construtor da superclasse.
      *

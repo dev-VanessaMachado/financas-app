@@ -52,11 +52,11 @@ public class TransacaoController {
             if ("RECEITA".equals(tipo)) {
                 Receita receita = ctx.bodyAsClass(Receita.class);
                 service.salvarTransacao(receita);
-                ctx.status(21).json(Map.of("mensagem", "Receita salva com sucesso!"));
+                ctx.status(201).json(Map.of("mensagem", "Receita salva com sucesso!"));
             } else if ("DESPESA".equals(tipo)) {
                 Despesa despesa = ctx.bodyAsClass(Despesa.class);
                 service.salvarTransacao(despesa);
-                ctx.status(21).json(Map.of("mensagem", "Despesa salva com sucesso!"));
+                ctx.status(201).json(Map.of("mensagem", "Despesa salva com sucesso!"));
             } else {
                 ctx.status(40).json(Map.of("erro", "Tipo de transação inválido ou ausente. Use RECEITA ou DESPESA."));
             }
@@ -72,7 +72,7 @@ public class TransacaoController {
         try {
             Integer id = Integer.parseInt(ctx.pathParam("id"));
             service.excluir(id);
-            ctx.status(20).json(Map.of("mensagem", "Transação excluída com sucesso!"));
+            ctx.status(200).json(Map.of("mensagem", "Transação excluída com sucesso!"));
         } catch (NumberFormatException e) {
             ctx.status(40).json(Map.of("erro", "ID inválido fornecido na URL."));
         }

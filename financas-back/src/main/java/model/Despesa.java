@@ -12,6 +12,14 @@ public class Despesa extends Transacao {
     private CategoriaDespesa categoria;
 
     /**
+     * CONSTRUTOR PADRÃO (VAZIO)
+     * Necessário para a deserialização do JSON pelo Jackson.
+     */
+    public Despesa() {
+        super(); // Invoca o construtor padrão de Transacao
+    }
+
+    /**
      * Construtor completo para inicializar uma despesa com suas propriedades base e sua categoria.
      *
      * @param id        O identificador único da despesa no banco de dados.

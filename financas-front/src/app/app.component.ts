@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { TransacaoService } from './transacao.service';
 
 @Component({
   selector: 'app-root',               // A tag HTML customizada que representa este componente
   templateUrl: './app.component.html', // O arquivo que cuida do visual
   styleUrls: ['./app.component.css']    // O arquivo que cuida dos estilos
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   // =========================================================================
   // PROPRIEDADES (Atributos da Classe)
@@ -14,24 +15,20 @@ export class AppComponent {
   // Uma variável simples do tipo texto (string)
   title: string = 'financas-front';
 
+  // Injetamos o nosso TransacaoService usando a função moderna inject()
+  private transacaoService = inject(TransacaoService);
+
   // Um objeto estruturado para simular os dados consolidados do usuário.
   // No TypeScript, objetos usam a estrutura de chave: valor entre chaves {}.
+  // O objeto do saldo (ele será recalculado à medida que as transações chegarem)
   resumoSaldo = {
     usuario: 'Vanessa Machado Araújo',
     saldoAtual: 4610.50,
     status: 'Positivo'
   };
 
-  /*
-  * Array (Lista) de Objetos de Transações.
-  * Cada item possui um id, uma descrição, um valor numérico e o tipo.
-  */
-  transacoes = [
-    { id: 1, descricao: 'Mercado Central', valor: 250.00, tipo: 'DESPESA' },
-    { id: 2, descricao: 'Salário Empresa', valor: 3500.00, tipo: 'RECEITA' },
-    { id: 3, descricao: 'Academia', valor: 90.00, tipo: 'DESPESA' },
-    { id: 4, descricao: 'Freelance Desenvolvedora', valor: 1450.00, tipo: 'RECEITA' }
-  ];
+  // Iniciamos a  lista vazia, aguardando a resposta da API Java
+  transacoes: any[] = [];
 
   // =========================================================================
   // VARIÁVEIS AUXILIARES (Conectadas diretamente ao Formulário HTML)
@@ -45,57 +42,101 @@ export class AppComponent {
   // =========================================================================
 
   /**
-   * Pega os dados capturados pelas variáveis auxiliares, valida e insere na lista.
+   * Implementamos a interface 'OnInit' e escrevemos o método 'ngOnInit()'.
+   * Ele é um "Lifecycle Hook" (Gancho de Ciclo de Vida) do Angular que executa automaticamente
+   * assim que a tela acaba de carregar no navegador. É o lugar perfeito para buscar os dados iniciais do banco.
+   */
+  ngOnInit(): void {
+    this.carregarTransacoes();
+  }
+
+  /**
+   * Método que chama o serviço, busca todas as transações e atualiza a tela e o saldo.
+   */
+  carregarTransacoes(): void {
+    // Como vimos, o listarTodas() retorna um Observable (uma promessa de dados futuros).
+    // Para capturar o resultado que o Java vai enviar quando a requisição terminar,
+    // precisamos nos "inscrever" usando o método .subscribe().
+    // É como assinar uma newsletter: toda vez que houver novos dados, o código dentro do subscribe executa!
+    this.transacaoService.listarTodas().subscribe({
+      next: (dadosDoJava) => {
+        // Quando a API responde com sucesso, salvamos a lista na nossa variável
+        this.transacoes = dadosDoJava;
+        // Recalculamos o saldo com base nos dados reais que vieram do banco
+        this.recalcularSaldo();
+      },
+      error: (erro) => {
+        // Se a API estiver offline ou der erro (ex: 500), tratamos aqui para não travar a tela
+        console.error('Erro ao buscar transações do backend Java:', erro);
+        alert('Não foi possível carregar as transações. Verifique se o seu backend Java está rodando!');
+      }
+    });
+  }
+
+  /**
+   * Coleta as variáveis preenchidas no formulário e envia para salvar no banco via POST.
    */
   adicionarTransacao(): void {
-
-    // Fazemos uma barreira de segurança (igual no Java).
-    // Verificamos se a descrição não está vazia (.trim() remove espaços em branco das pontas)
-    // e se o valor existe e é maior que zero. Se algo estiver errado, o código para no 'return'.
     if (!this.novaDescricao || this.novaDescricao.trim() === '' || !this.novoValor || this.novoValor <= 0) {
       alert('Por favor, preencha todos os campos corretamente!');
       return;
     }
 
-    // Criamos o novo objeto da transação estruturado
     const nova = {
-      id: Date.now(), // Gera um ID numérico único usando os milissegundos do relógio atual
       descricao: this.novaDescricao,
       valor: this.novoValor,
-      tipo: this.novoTipo
+      tipo: this.novoTipo,
+      data: new Date().toISOString().substring(0, 10) // Data de hoje formatada
     };
 
-    // O método .push() empurra o nosso novo objeto para o fim do Array original
-    this.transacoes.push(nova);
-
-    // Se a transação que o usuário acabou de criar for do tipo RECEITA, nós somamos ao saldo atual.
-    // Se for do tipo DESPESA, nós subtraímos do saldo atual.
-    if (nova.tipo === 'RECEITA') {
-      this.resumoSaldo.saldoAtual += nova.valor;
-    } else {
-      this.resumoSaldo.saldoAtual -= nova.valor;
-    }
-
-    // LIMPEZA:
-    // Como usamos Two-Way Data Binding, ao resetarmos as variáveis aqui no TypeScript,
-    // o Angular limpa instantaneamente os textos das caixinhas lá na tela do usuário!
-    this.novaDescricao = '';
-    this.novoValor = null;
-    this.novoTipo = 'RECEITA';
+    this.transacaoService.salvar(nova).subscribe({
+      next: () => {
+        // 1. O banco salvou! Agora buscamos a lista atualizada do Java para atualizar a tela na hora
+        this.carregarTransacoes();
+        // 2. Limpa os campos do formulário
+        this.limparFormulario();
+      },
+      error: (erro) => {
+        console.error('Erro ao salvar transação:', erro);
+        alert('Erro ao salvar no banco de dados!');
+      }
+    });
   }
 
   /**
-   * Remove uma transação específica da memória e estorna o seu impacto no saldo.
-   * @param transacaoSelecionada O objeto completo da transação que o usuário clicou
+   * Exclui a transação do banco de dados real via DELETE.
    */
-  excluirTransacao(transacaoSelecionada: any): void {
+  excluirTransacao(transacao: any): void {
+    this.transacaoService.excluir(transacao.id).subscribe({
+      next: () => {
+        // O banco excluiu! Recarregamos a lista para refletir a remoção e recalcular o saldo na tela
+        this.carregarTransacoes();
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir transação:', erro);
+        alert('Erro ao excluir do banco de dados!');
+      }
+    });
+  }
 
-    if (transacaoSelecionada.tipo === 'RECEITA') {
-      this.resumoSaldo.saldoAtual -= transacaoSelecionada.valor;
-    } else {
-      this.resumoSaldo.saldoAtual += transacaoSelecionada.valor;
-    }
+  /**
+   * Método auxiliar para somar as receitas e subtrair as despesas vindas do banco
+   */
+  private recalcularSaldo(): void {
+    let saldo = 0;
+    this.transacoes.forEach(t => {
+      if (t.tipo === 'RECEITA') {
+        saldo += t.valor;
+      } else {
+        saldo -= t.valor;
+      }
+    });
+    this.resumoSaldo.saldoAtual = saldo;
+  }
 
-    this.transacoes = this.transacoes.filter(t => t.id !== transacaoSelecionada.id);
+  private limparFormulario(): void {
+    this.novaDescricao = '';
+    this.novoValor = null;
+    this.novoTipo = 'RECEITA';
   }
 }

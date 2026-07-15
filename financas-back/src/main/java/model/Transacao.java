@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Representa uma movimentação financeira genérica no sistema.
@@ -9,11 +10,20 @@ import java.time.LocalDate;
  *
  * @author Vanessa Machado Araújo
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Transacao {
     private Integer id;
-    private String descicao;
+    private String descricao;
     private Double valor;
     private LocalDate data;
+
+    /**
+     * CONSTRUTOR PADRÃO (VAZIO)
+     * Requisito obrigatório para frameworks de serialização/deserialização JSON como o Jackson.
+     */
+    public Transacao() {
+        // Deixamos em branco para que o Jackson possa instanciar e preencher via setters.
+    }
 
     /**
      * Construtor completo para inicializar uma transação com todas as suas propriedades.
@@ -25,7 +35,7 @@ public abstract class Transacao {
      */
     public Transacao(Integer id, String descricao, Double valor, LocalDate data) {
         this.id = id;
-        this.descicao = descricao;
+        this.descricao = descricao;
         this.valor = valor;
         this.data = data;
     }
@@ -55,15 +65,15 @@ public abstract class Transacao {
      * @return A descrição detalhada.
      */
     public String getDescricao() {
-        return descicao;
+        return descricao;
     }
 
     /**
      * Altera a descrição da transação.
-     * @param descricao A nova descrição.
+     * @param 'descricao' A nova descrição.
      */
     public void setDescicao(String descicao) {
-        this.descicao = descicao;
+        this.descricao = descicao;
     }
 
     /**
