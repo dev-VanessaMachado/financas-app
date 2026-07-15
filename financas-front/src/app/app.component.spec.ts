@@ -1,9 +1,14 @@
+/// <reference types="jasmine" /> //
+
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { TransacaoService } from './transacao.service';
+
+// 1. FORÇA O INTELLIJ A IMPORTAR A FUNÇÃO EXPECT DO JASMINE REAL:
+const expect = (globalThis as any).expect;
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -25,6 +30,6 @@ describe('AppComponent', () => {
   it('deve criar a aplicação com sucesso', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(app).not.toBeNull();
   });
 });

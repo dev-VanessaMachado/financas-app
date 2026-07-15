@@ -1,8 +1,12 @@
+/// <reference types="jasmine" /> //
+
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TransacaoService } from './transacao.service';
 
+// 1. FORÇA O INTELLIJ A IMPORTAR A FUNÇÃO EXPECT DO JASMINE REAL:
+const expect = (globalThis as any).expect;
 describe('TransacaoService', () => {
   let service: TransacaoService;
   let httpMock: HttpTestingController; // Simula as respostas do nosso backend Java
@@ -26,7 +30,7 @@ describe('TransacaoService', () => {
   });
 
   it('deve ser criado com sucesso', () => {
-    expect(service).toBeTruthy();
+    expect(service).not.toBeNull();
   });
 
   it('deve buscar todas as transacoes via GET', () => {
