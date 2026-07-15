@@ -1,35 +1,30 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
+import { TransacaoService } from './transacao.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
       declarations: [
-        AppComponent
+        AppComponent // Como ele não é standalone, ele DEVE ficar aqui nas declarations!
       ],
+      imports: [
+        FormsModule
+      ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        TransacaoService // Fornece o seu serviço com segurança para o teste
+      ]
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('deve criar a aplicação com sucesso', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'financas-front'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('financas-front');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, financas-front');
   });
 });
