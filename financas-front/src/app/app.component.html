@@ -1,69 +1,97 @@
-<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
+<div class="dashboard-container">
 
-  <h1>Painel de Finanças Pessoais</h1>
-  <hr>
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Painel de Finanças</h1>
+      <p class="welcome-text">Bem-vinda de volta, <span>{{ resumoSaldo.usuario }}</span>!</p>
+    </div>
+  </header>
 
-  <h3>Bem-vinda de volta, {{ resumoSaldo.usuario }}!</h3>
-
-  <p>
-    Seu saldo atual é de:
-    <strong [style.color]="resumoSaldo.saldoAtual >= 0 ? 'green' : 'red'">
-      R$ {{ resumoSaldo.saldoAtual }}
-    </strong>
-  </p>
-
-  <p>Status da conta: <strong>{{ resumoSaldo.saldoAtual >= 0 ? 'Positivo' : 'Negativo' }}</strong></p>
-
-  <hr>
-
-  <h2>Nova Transação</h2>
-  <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-
-    <div style="margin-bottom: 10px;">
-      <label>Descrição: </label>
-      <input type="text" [(ngModel)]="novaDescricao" placeholder="Ex: Gasolina" style="width: 100%; padding: 5px;">
+  <div class="summary-grid">
+    <div class="summary-card balance-card" [ngClass]="{'positive-border': resumoSaldo.saldoAtual >= 0, 'negative-border': resumoSaldo.saldoAtual < 0}">
+      <h3>Saldo Atual</h3>
+      <p class="value" [style.color]="resumoSaldo.saldoAtual >= 0 ? '#10b981' : '#f43f5e'">
+        R$ {{ resumoSaldo.saldoAtual | number:'1.2-2' }}
+      </p>
+      <span class="status-badge" [ngClass]="resumoSaldo.saldoAtual >= 0 ? 'badge-success' : 'badge-danger'">
+        Conta {{ resumoSaldo.saldoAtual >= 0 ? 'Positiva' : 'Negativa' }}
+      </span>
     </div>
 
-    <div style="margin-bottom: 10px;">
-      <label>Valor (R$): </label>
-      <input type="number" [(ngModel)]="novoValor" placeholder="0.00" style="width: 100%; padding: 5px;">
+    <div class="summary-card info-card">
+      <h3>Dica Financeira</h3>
+      <p class="info-text">Monitore suas despesas regularmente para manter sua saúde financeira em dia! 🚀</p>
     </div>
-
-    <div style="margin-bottom: 10px;">
-      <label>Tipo: </label>
-      <select [(ngModel)]="novoTipo" style="width: 100%; padding: 5px;">
-        <option value="RECEITA">Receita (Entrada)</option>
-        <option value="DESPESA">Despesa (Saída)</option>
-      </select>
-    </div>
-
-    <button (click)="adicionarTransacao()" style="background-color: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; width: 100%; font-weight: bold;">
-      Salvar Transação
-    </button>
   </div>
 
-  <hr>
+  <div class="main-grid">
 
-  <h2>Extrato de Transações</h2>
+    <section class="form-section">
+      <h2>Nova Transação</h2>
+      <div class="card-form">
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <input
+            type="text"
+            id="descricao"
+            [(ngModel)]="novaDescricao"
+            placeholder="Ex: Aluguel, Supermercado..."
+          >
+        </div>
 
-  <p *ngIf="transacoes.length === 0" style="color: #666; font-style: italic; background-color: #f0f0f0; padding: 10px; border-radius: 4px; text-align: center;">
-    Nenhuma transação cadastrada até o momento. Seu extrato está limpo!
-  </p>
+        <div class="form-group">
+          <label for="valor">Valor (R$)</label>
+          <input
+            type="number"
+            id="valor"
+            [(ngModel)]="novoValor"
+            placeholder="0,00"
+          >
+        </div>
 
-  <ul style="list-style-type: none; padding: 0;">
-    <li *ngFor="let t of transacoes" style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+        <div class="form-group">
+          <label for="tipo">Tipo</label>
+          <select id="tipo" [(ngModel)]="novoTipo">
+            <option value="RECEITA">Receita (Entrada)</option>
+            <option value="DESPESA">Despesa (Saída)</option>
+          </select>
+        </div>
 
-      <span>{{ t.descricao }}</span>
+        <button (click)="adicionarTransacao()" class="btn-submit">
+          Salvar Transação
+        </button>
+      </div>
+    </section>
 
-      <strong [style.color]="t.tipo === 'RECEITA' ? 'green' : 'red'">
-        {{ t.tipo === 'RECEITA' ? '+' : '-' }} R$ {{ t.valor }}
-      </strong>
+    <section class="extract-section">
+      <h2>Extrato de Transações</h2>
 
-      <button (click)="excluirTransacao(t)" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-weight: bold;">
-        Excluir
-      </button>
+      <div class="extract-card">
+        <p *ngIf="transacoes.length === 0" class="empty-state">
+          Nenhuma transação cadastrada até o momento. Seu extrato está limpo! ✨
+        </p>
 
-    </li>
-  </ul>
+        <ul class="transaction-list" *ngIf="transacoes.length > 0">
+          <li *ngFor="let t of transacoes" class="transaction-item">
+            <div class="transaction-info">
+              <span class="icon-indicator" [ngClass]="t.tipo === 'RECEITA' ? 'icon-up' : 'icon-down'">
+                {{ t.tipo === 'RECEITA' ? '▲' : '▼' }}
+              </span>
+              <span class="transaction-desc">{{ t.descricao }}</span>
+            </div>
 
+            <div class="transaction-actions">
+              <strong class="transaction-value" [style.color]="t.tipo === 'RECEITA' ? '#10b981' : '#f43f5e'">
+                {{ t.tipo === 'RECEITA' ? '+' : '-' }} R$ {{ t.valor | number:'1.2-2' }}
+              </strong>
+              <button (click)="excluirTransacao(t)" class="btn-delete" title="Excluir Transação">
+                ✕
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
 </div>

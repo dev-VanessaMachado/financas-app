@@ -1,0 +1,284 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #0b0f19; /* Fundo geral escuro bem suave (Navy Dark) */
+  color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.dashboard-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header */
+.dashboard-header {
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 5px 0;
+}
+
+.welcome-text {
+  color: #9ca3af;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.welcome-text span {
+  color: #10b981; /* Verde esmeralda para o seu nome */
+  font-weight: 600;
+}
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.summary-card {
+  background-color: #111827; /* Cinza escuro para os cards */
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.summary-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-card .value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+}
+
+/* Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.badge-danger {
+  background-color: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+/* Card especial do saldo ativo */
+.balance-card.positive-border {
+  border-left: 5px solid #10b981;
+}
+
+.balance-card.negative-border {
+  border-left: 5px solid #f43f5e;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Main Grid Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Cards de Formulário e Extrato */
+.card-form, .extract-card {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+/* Estilização dos Inputs e Labels */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.form-group input, .form-group select {
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: #6b7280;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* Botão de Enviar */
+.btn-submit {
+  background-color: #10b981;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: 600;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.btn-submit:hover {
+  background-color: #059669;
+}
+
+.btn-submit:active {
+  transform: scale(0.98);
+}
+
+/* Estilo do Extrato / Lista */
+.empty-state {
+  color: #9ca3af;
+  font-style: italic;
+  text-align: center;
+  margin: 40px 0;
+  font-size: 0.95rem;
+}
+
+.transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #1f2937;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Ícones Indicadores */
+.icon-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+}
+
+.icon-up {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.icon-down {
+  background-color: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+}
+
+.transaction-desc {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #f3f4f6;
+}
+
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.transaction-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Botão de Excluir Minimalista e Moderno */
+.btn-delete {
+  background: transparent;
+  color: #6b7280;
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-delete:hover {
+  background-color: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
