@@ -1,4 +1,3 @@
-```markdown
 # 💰 Painel de Finanças Pessoais
 
 Uma aplicação full-stack moderna e reativa para controle de finanças pessoais, desenvolvida com o objetivo de aplicar as melhores práticas de arquitetura de software, design de interface de alta fidelidade e pirâmide de testes automatizados (unitários, integração e ponta a ponta).
@@ -11,132 +10,138 @@ O painel conta com uma interface minimalista com tema escuro (Dark/Emerald), ins
 
 ![Demonstração do Painel](./financas-front/assets/dashboard.png)
 
-* **Cards de Resumo:** Exibição dinâmica de saldo atual com alertas visuais baseados no status da conta (positivo/negativo).
-* **Formulário Inteligente:** Inputs modernos com estados de foco interativos e validação de tipo de transação (Receita/Despesa).
-* **Extrato Reativo:** Atualização instantânea da lista de transações em tempo real sem a necessidade de recarregar a página.
+- **Cards de Resumo:** Exibição dinâmica de saldo atual com alertas visuais baseados no status da conta (positivo/negativo).
+- **Formulário Inteligente:** Inputs modernos com estados de foco interativos e validação de tipo de transação (Receita/Despesa).
+- **Extrato Reativo:** Atualização instantânea da lista de transações em tempo real sem a necessidade de recarregar a página.
 
+---
 
 ## 🛠️ Tecnologias & Ferramentas Utilizadas
 
-### **Backend**
-* **Java (JDK 21):** Linguagem robusta e fortemente tipada para o núcleo de negócios.
-* **Javalin:** Microframework web leve para construção de APIs REST rápidas e eficientes.
-* **PostgreSQL:** Banco de dados relacional de alta performance para persistência confiável das transações.
-* **JUnit & Mockito:** Testes de unidade e de integração para validação do comportamento da API.
+### Backend
 
-### **Frontend**
-* **Angular:** Framework SPA estruturado para garantir escalabilidade e componentização.
-* **TypeScript:** Garantia de segurança de tipos e melhor legibilidade no desenvolvimento cliente.
-* **Jasmine & Karma:** Framework de testes e executor de testes para a camada de visualização e serviços.
-* **Cypress:** Ferramenta líder de testes E2E (End-to-End) para simulação de fluxo real de usuário.
-* **Google Fonts & CSS Custom Properties:** Estilização moderna e limpa focada em consistência visual.
+- **Java (JDK 21):** Linguagem robusta e fortemente tipada para o núcleo de negócios.
+- **Javalin:** Microframework web leve para construção de APIs REST rápidas e eficientes.
+- **PostgreSQL:** Banco de dados relacional de alta performance para persistência confiável das transações.
+- **JUnit & Mockito:** Testes de unidade e de integração para validação do comportamento da API.
+
+### Frontend
+
+- **Angular:** Framework SPA estruturado para garantir escalabilidade e componentização.
+- **TypeScript:** Garantia de segurança de tipos e melhor legibilidade no desenvolvimento cliente.
+- **Jasmine & Karma:** Testes unitários do frontend.
+- **Cypress:** Testes End-to-End (E2E).
+- **Google Fonts & CSS Custom Properties:** Estilização moderna.
 
 ---
 
 ## 📐 Arquitetura do Projeto
 
-O sistema foi arquitetado de forma totalmente desacoplada, utilizando a abordagem de **Client-Server Architecture**:
+O sistema foi arquitetado utilizando uma abordagem **Client-Server Architecture**.
 
+```text
++---------------------+        HTTP / JSON        +----------------------+
+| Frontend (Angular)  |  <--------------------->  | Backend (Javalin)    |
++---------------------+                           +----------------------+
+         |                                                  |
+         |                                                  |
+         |                                                  |
+         |                                           JDBC
+         |                                                  |
+         |                                                  v
+         |                                         +------------------+
+         |                                         |   PostgreSQL     |
+         |                                         +------------------+
+         |
+         +-- Jasmine / Karma (Unit)
+         +-- Cypress (E2E)
 
-```
-
-[ Frontend (Angular) ]  <--- HTTP / JSON --->  [ Backend (Javalin API) ]  <--- JDBC --->  [ PostgreSQL ]
-|                                                 |
-
-* Jasmine/Karma (Unit)                            - JUnit (Unit/Integration)
-* Cypress (E2E)
-
+Backend:
+- JUnit
+- Mockito
 ```
 
 ---
 
-## 🧪 Estratégia de Testes (A Pirâmide Completa!)
+## 🧪 Estratégia de Testes
 
-Este projeto foi construído sob um rigoroso fluxo de garantia de qualidade, cobrindo todas as camadas de testes:
+Este projeto foi desenvolvido seguindo a Pirâmide de Testes.
 
-### **1. Testes de Unidade e Integração (Backend)**
-Garantem que as rotas da API, regras de negócio de saldo e transações estejam computando e respondendo com os códigos HTTP corretos (ex: `201 Created`, `200 OK`).
+### 1. Testes de Unidade e Integração (Backend)
 
-### **2. Testes Unitários de Componente e Serviço (Frontend - Jasmine/Karma)**
-* `transacao.service.spec.ts`: Intercepta chamadas HTTP usando `HttpTestingController` para testar o comportamento de requisições de forma isolada.
-* `app.component.spec.ts`: Valida a criação segura do componente principal e integridade das injeções de dependências.
+Garantem que as rotas da API, regras de negócio e persistência funcionem corretamente.
 
-### **3. Testes Ponta a Ponta (E2E - Cypress)**
-Simula o comportamento de um usuário real na interface gráfica:
-1. O robô visita o endereço local.
-2. Preenche o formulário com uma nova receita.
-3. Clica no botão de salvar.
-4. Valida se o valor correto apareceu renderizado na tabela do extrato físico e se a requisição de API persistiu o registro com sucesso.
+### 2. Testes Unitários (Frontend)
+
+- `transacao.service.spec.ts`
+- `app.component.spec.ts`
+
+Utilizando **Jasmine** e **Karma**.
+
+### 3. Testes End-to-End (Cypress)
+
+Fluxo validado:
+
+1. Acessa a aplicação.
+2. Preenche o formulário.
+3. Salva uma transação.
+4. Verifica se a transação aparece no extrato.
 
 ---
 
-## ⚙️ Como Executar o Projeto Localmente
+## ⚙️ Como Executar
 
-### **Pré-requisitos**
-* Java JDK 21 ou superior instalado
-* Node.js (versão LTS recomendada)
-* PostgreSQL rodando localmente (ou Docker)
+### Pré-requisitos
 
-### **Passo 1: Iniciando o Backend**
-1. Navegue até a pasta do backend:
-   ```bash
-   cd financas-app-backend
+- Java 21+
+- Node.js LTS
+- PostgreSQL
 
+### Backend
+
+```bash
+cd financas-app-backend
 ```
 
-2. Configure as credenciais do seu banco de dados no arquivo de propriedades/configuração.
-3. Execute a aplicação (usando Maven ou Gradle de sua preferência):
+Configure o banco de dados e execute:
+
 ```bash
 mvn clean install
 mvn exec:java
-
 ```
 
+Servidor disponível em:
 
-*O servidor iniciará na porta `8080` por padrão.*
+```text
+http://localhost:8080
+```
 
-### **Passo 2: Iniciando o Frontend**
+### Frontend
 
-1. Navegue até a pasta do frontend:
 ```bash
 cd financas-front
-
-```
-
-
-2. Instale as dependências necessárias:
-```bash
 npm install
-
-```
-
-
-3. Inicie o servidor de desenvolvimento do Angular:
-```bash
 npm start
-
 ```
 
+Acesse:
 
-*Acesse a aplicação em [http://localhost:4200](http://localhost:4200).*
+```text
+http://localhost:4200
+```
 
 ---
 
-## 🏃 Refém dos Testes? Execute-os!
+## 🏃 Executando os Testes
 
-Para rodar os testes unitários do frontend com o executor Karma:
+### Frontend
 
 ```bash
 npx ng test
-
 ```
 
-Para abrir a interface gráfica do Cypress e rodar os testes de ponta a ponta interativamente:
+### Cypress
 
 ```bash
 npx cypress open
-
 ```
-
-
-
